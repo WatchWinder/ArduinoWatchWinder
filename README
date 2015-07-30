@@ -10,22 +10,30 @@ navigate the menu and change settings.
 
 This project provides ability for the following:
 
--Adjustable number of turns per day (TPD)
-  -increments of 5, an arbitrary decision.
--Adjustable direction
-  -clockwise
-  -counterclockwise
-  -both
--Adjustable turn frequency
-  -turn the watch ever n number of minutes. Do you want that hour's turns to happen 
-   all at once at the top of the hour, or spread out every 5 minutes throughout the hour?
-  -winder automatically calculates number of turns per cycle, depending on cycle frequency
--Full wind
-  -run continuously, to wind a watch from a dead stop. 800 turns (arbitrary decision).
--Turn counter
-  -displays number of turns since midnight.
--GPS receiver
-  -get time for on screen clock, and for resetting turn counter at midnight.
+  Adjustable number of turns per day (TPD)
+    -increments of 5, an arbitrary decision.
+  
+  Adjustable direction
+    -clockwise
+    -counterclockwise
+    -both
+  
+  Adjustable turn frequency
+    -turn the watch ever n number of minutes. Do you want that hour's turns to
+     happen all at once at the top of the hour, or spread out every 5 minutes
+     throughout the hour?
+    -winder automatically calculates number of turns per cycle, depending on
+     cycle frequency
+  
+  Full wind
+    -run continuously, to wind a watch from a dead stop. 800 turns (arbitrary
+     decision).
+  
+  Turn counter
+    -displays number of turns since midnight.
+  
+  GPS receiver
+    -get time for on screen clock, and for resetting turn counter at midnight.
 
 
 -Arduino IDE 1.0.5
