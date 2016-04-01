@@ -4,8 +4,9 @@
   -Arduino Mega 2560 R3
   -NEMA 14 0.9deg (400 step/rev) 11Ncm stepper motor
   -SilentStepStick stepper motor driver
-  -Adafruit Ultimate GPS Breakout
-  -SainSmart 20x4 LCD I2c
+  -Adafruit Ultimate GPS Breakout [ID:746]
+  -Adafruit RGB backlight negative LCD 20x4 + extras (RGB on black) [ID:498]
+  -Adafruit i2c / SPI character LCD backpack[ID:292]
 
 FUNCTIONS
 -Adjustable number of turns per day (TPD)
@@ -27,11 +28,10 @@ FUNCTIONS
 
 #include <TimerOne.h>
 #include <Wire.h>
-//INSERT THE NEXT 5 INCLUDES AFTER INCLUDING WIRE LIB 
-#include <LCD.h>
-#include <LiquidCrystal_I2C.h>
+//INSERT THE NEXT 4 INCLUDES AFTER INCLUDING WIRE LIBRARY
+#include <LiquidTWI2.h>
 #include <buttons.h>
-#include <MENWIZ.h>
+#include <MENWIZ_LiquidTWI2.h>
 #include <EEPROM.h>
 //---------------------------------------------------
 #include <AccelStepper.h>
@@ -87,9 +87,10 @@ unsigned long SEC_COUNTER    =                0; //Used to see if a second has p
 //////////////////////////////////////////////////////////
 //                    OBJECTS                           //
 //////////////////////////////////////////////////////////
-//CREATE GLOBAL OBJECT MENU AND LCD
+
 menwiz menu;
-LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE); //Addr, En, Rw, Rs, d4, d5, d6, d7, backlighpin, polarity
+//Adafruit_LiquidCrystal lcd(0);
+LiquidTWI2 lcd(0x20);
 
 //CREATE ACCELSTEPPERS
 AccelStepper w1STEPPER(1, 23, 22);  //1 pin=driver, 23=step pin, 22=direction pin
@@ -106,6 +107,10 @@ void setup()
   Serial.begin(19200);
   
   SEC_COUNTER = now();
+  
+  // SET UP LCD
+  lcd.setMCPType(LTI_TYPE_MCP23008);
+  lcd.begin(20, 4);
   
   //CHECK IF SETTINGS ARE STORED IN MEMORY & LOAD IF SO
   if (EEPROM.read(0) == 1)
@@ -134,15 +139,13 @@ void setup()
   GPS.begin(9600);
   GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCONLY);
   GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ); 
-
   
   ////////////////////////////////////////////////
   //         MENU STRUCTURE STARTS HERE         //
   ////////////////////////////////////////////////
-  _menu *r,*s1,*s2,*s3;
+  _menu *r,*s1,*s2;
   _var *v; 
-  int  mem;
-
+  
   //INIZIALIZE THE MENU OBJECT (20 COLUMS X 4 ROWS)
   menu.begin(&lcd,20,4);
   menu.setBehaviour(MW_MENU_INDEX,false);    
@@ -181,7 +184,7 @@ void setup()
   //DECLARE NAVIGATION BUTTONS (REQUIRED)
   menu.navButtons(UP_BUTTON,DOWN_BUTTON,ESCAPE_BUTTON,CONFIRM_BUTTON);
 
-  //(optional)create a user define screen callback to activate after 10 secs (10.000 millis) since last button push 
+  //(optional)create a user define screen callback to activate after 5 secs (5000 millis) since last button push 
   menu.addUsrScreen(statusScreen,5000);
 
   //Timer1 INTERRUPTS - fires stepper.run() & reads GPS every 250 microseconds
@@ -356,11 +359,25 @@ void changeDSTOffset()
 {
   if (DST)
   { 
-    TIME_HOUR = TIME_HOUR+1;
+    if (TIME_HOUR != 23)
+    {
+      TIME_HOUR = TIME_HOUR+1;
+    }
+    else
+    {
+      TIME_HOUR = 0;
+    }
   }
   if (!DST)
   {
-    TIME_HOUR = TIME_HOUR-1;
+    if (TIME_HOUR != 0)	 //add this if/else to deal with changing DST setting after clock is midnight. Currently changes hour to -1 which is no good.
+    {
+      TIME_HOUR = TIME_HOUR-1;
+    }
+    else
+    {
+      TIME_HOUR = 23;
+    }
   }
   DST_LAST=DST;
 }
@@ -391,21 +408,21 @@ void fullWind()
   {
     switch (w1DIR)
     {
-        //CLOCKWISE FULL WIND
+      //CLOCKWISE FULL WIND
       case 0:
         w1FULL_WIND_STATUS = 1;
         w1DIRECTION = -1;
         w1STEPS = w1FULL_WIND*REV;
         break;
         
-        //COUNTER CLOCKWISE FULL WIND
+      //COUNTER CLOCKWISE FULL WIND
       case 1:
         w1FULL_WIND_STATUS = 1;
         w1DIRECTION = 1;
         w1STEPS = w1FULL_WIND*REV;
         break;
         
-        //BOTH DIRECTION FULL WIND
+      //BOTH DIRECTION FULL WIND
       case 2:
         w1FULL_WIND_STATUS = 2;
         w1DIRECTION = -1*w1DIRECTION;
