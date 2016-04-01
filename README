@@ -5,6 +5,10 @@ decisions and/or formatting.
 
 This project makes use of the MENWIZ library for creating the LCD menu structure.
 
+NOTE: The newest version of this project uses an altered version of the MENWIZ library,
+which I have titled MENWIZ_LiquidTWI2. I have included a zip file which you will need
+to download and add to your library folder.
+
 There are four navigational buttons (down, up, confirm, escape) which are used to 
 navigate the menu and change settings.
 
@@ -41,5 +45,6 @@ This project provides ability for the following:
   -Arduino Mega 2560 R3
   -NEMA 14 0.9deg (400 step/rev) 11Ncm stepper motor
   -SilentStepStick stepper motor driver
-  -Adafruit Ultimate GPS Breakout
-  -SainSmart 20x4 LCD I2c
+  -Adafruit Ultimate GPS Breakout [ID:746]
+  -Adafruit RGB backlight negative LCD 20x4 + extras (RGB on black) [ID:498]
+  -Adafruit i2c / SPI character LCD backpack[ID:292]
