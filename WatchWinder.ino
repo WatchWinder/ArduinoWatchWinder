@@ -89,7 +89,6 @@ unsigned long SEC_COUNTER    =                0; //Used to see if a second has p
 //////////////////////////////////////////////////////////
 
 menwiz menu;
-//Adafruit_LiquidCrystal lcd(0);
 LiquidTWI2 lcd(0x20);
 
 //CREATE ACCELSTEPPERS
