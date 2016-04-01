@@ -1,11 +1,11 @@
 I developed this Arduino controlled watch winder because the commercially available
-winder did not offer as much control as I was looking for at a price point I was 
+winders did not offer as much control as I was looking for at a price point I was 
 comfortable with. I am not a programmer, so please forgive any non-conventional
 decisions and/or formatting.
 
 This project makes use of the MENWIZ library for creating the LCD menu structure.
 
-NOTE: The newest version of this project uses an altered version of the MENWIZ library,
+***NOTE: The newest version of this project uses an altered version of the MENWIZ library,
 which I have titled MENWIZ_LiquidTWI2. I have included a zip file which you will need
 to download and add to your library folder.
 
@@ -37,7 +37,7 @@ This project provides ability for the following:
     -displays number of turns since midnight.
   
   GPS receiver
-    -get time for on screen clock, and for resetting turn counter at midnight.
+    -get time for on-screen clock, and for resetting turn counter at midnight.
 
 
 -Arduino IDE 1.0.5
